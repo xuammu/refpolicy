@@ -21,3 +21,4 @@ support-v25-usec-policy.patch
 0001-deepin-fix-application-antiunloading-bug.patch
 initialize-usids-of-usec-policy.patch
 0001-fix-immutable.patch
+0003-filearmor-policy-migrate.patch

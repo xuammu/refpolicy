@@ -1,0 +1,63 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: security <security@uniontech.com>
+Date: Fri, 14 Aug 2026 00:00:00 +0800
+Subject: [PATCH] filearmor policy migrate to usec
+
+Migrate /var/uos/.license.xkey and /etc/apt/auth.conf.d/uos.conf
+filearmor protection to usec (SELinux) policy.
+
+---
+ policy/modules/services/deepin_perm_control.fc | 2 ++
+ policy/modules/services/deepin_perm_control.te | 32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
+
+Index: refpolicy/policy/modules/services/deepin_perm_control.fc
+===================================================================
+--- refpolicy.orig/policy/modules/services/deepin_perm_control.fc
++++ refpolicy/policy/modules/services/deepin_perm_control.fc
+@@ -9,3 +9,5 @@
+ /usr/sbin/deepin-security-enhance   --   gen_context(system_u:object_r:deepin_security_enhance_exec_t,s0)
+ /home/\.sec    -d   gen_context(system_u:object_r:deepin_home_sec_t,s0)
+ /home/\.sec(/.*)?   gen_context(system_u:object_r:deepin_home_sec_t,s0)
++/etc/apt/auth\.conf\.d/uos\.conf   --   gen_context(system_u:object_r:deepin_ro_file_t,s0)
++/var/uos/\.license\.xkey           --   gen_context(system_u:object_r:deepin_ro_file_t,s0)
+Index: refpolicy/policy/modules/services/deepin_perm_control.te
+===================================================================
+--- refpolicy.orig/policy/modules/services/deepin_perm_control.te
++++ refpolicy/policy/modules/services/deepin_perm_control.te
+@@ -962,3 +962,35 @@
+     allow deepin_system_service_t apt_t:process *;
+     allow deepin_system_service_t dpkg_t:process *;
+ ')
++
++ifdef(`enable_usec',`
++    # ======== filearmor 策略迁移至 usec ========
++    # 核心文件(/var/uos/.license.xkey、/etc/apt/auth.conf.d/uos.conf)写权限域
++    attribute deepin_corefile_writable_domain;
++
++    # 原 filearmor 白名单中落默认域 deepin_usec_t 的应用，新建专用域
++    type deepin_activator_t;
++    deepin_app_domain_set(deepin_activator_t)
++    typeattribute deepin_activator_t deepin_corefile_writable_domain;
++
++    type deepin_license_agent_t;
++    deepin_app_domain_set(deepin_license_agent_t)
++    typeattribute deepin_license_agent_t deepin_corefile_writable_domain;
++
++    type deepin_service_support_t;
++    deepin_app_domain_set(deepin_service_support_t)
++    typeattribute deepin_service_support_t deepin_corefile_writable_domain;
++
++    type deepin_daemon_t;
++    deepin_app_domain_set(deepin_daemon_t)
++    typeattribute deepin_daemon_t deepin_corefile_writable_domain;
++
++    # 已有独立域的白名单应用显式纳入
++    typeattribute deepin_immutable_t deepin_corefile_writable_domain;
++    typeattribute deepin_perm_manager_sidtwo_t deepin_corefile_writable_domain;
++    typeattribute apt_t deepin_corefile_writable_domain;
++    typeattribute dpkg_t deepin_corefile_writable_domain;
++
++    # 核心文件写权限(filearmor rwxd 等价)
++    allow deepin_corefile_writable_domain deepin_ro_file_t:file { read_file_perms setattr_file_perms write_file_perms };
++')

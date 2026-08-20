@@ -8,34 +8,40 @@ filearmor protection to usec (SELinux) policy.
 
 ---
  policy/modules/services/deepin_perm_control.fc | 2 ++
- policy/modules/services/deepin_perm_control.te | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+ policy/modules/services/deepin_perm_control.te | 36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
 Index: refpolicy/policy/modules/services/deepin_perm_control.fc
 ===================================================================
 --- refpolicy.orig/policy/modules/services/deepin_perm_control.fc
 +++ refpolicy/policy/modules/services/deepin_perm_control.fc
-@@ -9,3 +9,5 @@
+@@ -9,3 +9,7 @@
  /usr/sbin/deepin-security-enhance   --   gen_context(system_u:object_r:deepin_security_enhance_exec_t,s0)
  /home/\.sec    -d   gen_context(system_u:object_r:deepin_home_sec_t,s0)
  /home/\.sec(/.*)?   gen_context(system_u:object_r:deepin_home_sec_t,s0)
-+/etc/apt/auth\.conf\.d/uos\.conf   --   gen_context(system_u:object_r:deepin_ro_file_t,s0)
-+/var/uos/\.license\.xkey           --   gen_context(system_u:object_r:deepin_ro_file_t,s0)
++ifdef(`enable_usec',`
++/etc/apt/auth\.conf\.d/uos\.conf   --   gen_context(system_u:object_r:deepin_uos_auth_conf_t,s0)
++/var/uos/\.license\.xkey           --   gen_context(system_u:object_r:deepin_license_xkey_t,s0)
++')
 Index: refpolicy/policy/modules/services/deepin_perm_control.te
 ===================================================================
 --- refpolicy.orig/policy/modules/services/deepin_perm_control.te
 +++ refpolicy/policy/modules/services/deepin_perm_control.te
-@@ -962,3 +962,35 @@
+@@ -962,3 +962,39 @@
      allow deepin_system_service_t apt_t:process *;
      allow deepin_system_service_t dpkg_t:process *;
  ')
 +
 +ifdef(`enable_usec',`
-+    # ======== filearmor 策略迁移至 usec ========
-+    # 核心文件(/var/uos/.license.xkey、/etc/apt/auth.conf.d/uos.conf)写权限域
 +    attribute deepin_corefile_writable_domain;
++    type deepin_uos_auth_conf_t;
++    deepin_file_type_set(deepin_uos_auth_conf_t)
++    deepin_readable_file_type_set(deepin_uos_auth_conf_t)
 +
-+    # 原 filearmor 白名单中落默认域 deepin_usec_t 的应用，新建专用域
++    type deepin_license_xkey_t;
++    deepin_file_type_set(deepin_license_xkey_t)
++    deepin_readable_file_type_set(deepin_license_xkey_t)
++
 +    type deepin_activator_t;
 +    deepin_app_domain_set(deepin_activator_t)
 +    typeattribute deepin_activator_t deepin_corefile_writable_domain;
@@ -58,6 +64,6 @@ Index: refpolicy/policy/modules/services/deepin_perm_control.te
 +    typeattribute apt_t deepin_corefile_writable_domain;
 +    typeattribute dpkg_t deepin_corefile_writable_domain;
 +
-+    # 核心文件写权限(filearmor rwxd 等价)
-+    allow deepin_corefile_writable_domain deepin_ro_file_t:file { read_file_perms setattr_file_perms write_file_perms };
++    allow deepin_corefile_writable_domain deepin_uos_auth_conf_t:file { read_file_perms setattr_file_perms write_file_perms };
++    allow deepin_corefile_writable_domain deepin_license_xkey_t:file { read_file_perms setattr_file_perms write_file_perms };
 +')

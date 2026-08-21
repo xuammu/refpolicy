@@ -1,3 +1,9 @@
+refpolicy (2:2.20240723-2deepin21) unstable; urgency=medium
+
+  * feat: usec: replace filearmor default policy with usec policy 
+
+ -- chenxuanlin <chenxuanlin@uniontech.com>  Fri, 21 Aug 2026 17:13:49 +0800
+
 refpolicy (2:2.20240723-2deepin20) unstable; urgency=medium
 
   * fix: usec: denied deepin_unkillable_t socket create.

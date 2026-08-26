@@ -4235,7 +4235,7 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 ===================================================================
 --- /dev/null
 +++ refpolicy-deepin/policy/modules/services/deepin_perm_control.if
-@@ -0,0 +1,872 @@
+@@ -0,0 +1,876 @@
 +## <summary>Policy for deepin_perm_control and related programs.</summary>
 +
 +########################################
@@ -4590,6 +4590,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +## <summary>
 +##  allow domain to access camera resource.
 +## </summary>
++## <desc>
++##  <p>
++##  Grant the $1_t domains access camera resource by condition
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4601,11 +4607,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		attribute deepin_camera_resource_type;
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Grant the $1_t domains access camera resource by condition
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_access_camera', $2)
 +
 +	tunable_policy(`allow_$1_access_camera',`
@@ -4655,6 +4656,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +## <summary>
 +##  allow domain to access microphone resource.
 +## </summary>
++## <desc>
++##  <p>
++##  Grant the $1_t domains access microphone resource by condition
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4666,11 +4673,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		attribute deepin_microphone_resource_type;
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Grant the $1_t domains access microphone resource by condition
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_access_microphone', $2)
 +
 +	tunable_policy(`allow_$1_access_microphone',`
@@ -4682,6 +4684,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +## <summary>
 +##  let domain unkillable.
 +## </summary>
++## <desc>
++##  <p>
++##  Let $1 be unkillable.
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4694,11 +4702,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		class service { stop reload disable };
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Let $1 be unkillable.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_be_unkillable', $2)
 +
 +	tunable_policy(`! allow_$1_be_unkillable',`
@@ -4711,6 +4714,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +## <summary>
 +##  let exec file writable.
 +## </summary>
++## <desc>
++##  <p>
++##  Let $1 can be write.
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4722,11 +4731,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		attribute deepin_executable_file_type;
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Let $1 can be write.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_execfile_protection', $2)
 +
 +	tunable_policy(`! allow_$1_execfile_protection',`
@@ -4738,6 +4742,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +## <summary>
 +##  allow specific domain to access security service.
 +## </summary>
++## <desc>
++##  <p>
++##  Allow $1 to access security service.
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4750,11 +4760,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		class dbus { send_msg };
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Allow $1 to access security service.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_access_security_server', $2)
 +
 +	tunable_policy(`allow_$1_access_security_server',`
@@ -4767,6 +4772,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +##  allow specific domain to manage all files which
 +##  were labeled to deepin_sidtwo_type.
 +## </summary>
++## <desc>
++##  <p>
++##  Allow $1 to manage deepin_sidtwo_type.
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4778,11 +4789,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		attribute deepin_sidtwo_type;
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Allow $1 to manage deepin_sidtwo_type.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_manage_all_sidtwo', $2)
 +
 +	tunable_policy(`allow_$1_manage_all_sidtwo',`
@@ -4814,6 +4820,12 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +##  allow specific domain to manage all files which
 +##  were labeled to deepin_wall_paper_resource_type.
 +## </summary>
++## <desc>
++##  <p>
++##  Allow $1 to manage deepin_wall_paper_resource_type.
++##  </p>
++## </desc>
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allowed access.
@@ -4825,11 +4837,6 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +		attribute deepin_wall_paper_resource_type;
 +	')
 +
-+	## <desc>
-+	##  <p>
-+	##  Allow $1 to manage deepin_wall_paper_resource_type.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_manage_wall_paper', $2)
 +
 +	tunable_policy(`allow_$1_manage_wall_paper',`
@@ -4903,6 +4910,13 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +## <summary>
 +##  allow specific domain to access network.
 +## </summary>
++## <desc>
++##  <p>
++##  ##  allow $1 to access upstream network. ##  allow $1 to access downstream network.
++##  </p>
++## </desc>
++
++
 +## <param name="domain">
 +##  <summary>
 +##  Domain allow access.
@@ -4911,18 +4925,8 @@ Index: refpolicy-deepin/policy/modules/services/deepin_perm_control.if
 +#
 +interface(`deepin_access_network',`
 +
-+	## <desc>
-+	##  <p>
-+	##  allow $1 to access upstream network.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_access_net_up', $2)
 +
-+	## <desc>
-+	##  <p>
-+	##  allow $1 to access downstream network.
-+	##  </p>
-+	## </desc>
 +	gen_tunable(`allow_$1_access_net_down', $2)
 +
 +	tunable_policy(`allow_$1_access_net_up',`

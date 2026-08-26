@@ -1,3 +1,9 @@
+refpolicy (2:2.20240723-2deepin22) unstable; urgency=medium
+
+  * fix: 0004 patch hunk context drift and reorder <desc> blocks in deepin_perm_control.if to satisfy the policy.dtd validation that previously aborted the build.
+
+ -- chenxuanlin <chenxuanlin@uniontech.com>  Wed, 26 Aug 2026 15:13:49 +0800
+ 
 refpolicy (2:2.20240723-2deepin21) unstable; urgency=medium
 
   * feat: usec: replace filearmor default policy with usec policy 
